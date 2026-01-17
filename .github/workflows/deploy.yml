@@ -24,6 +24,8 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Build Project
+        env:
+          VITE_BACKEND_URL: ${{ secrets.VITE_BACKEND_URL }}
         run: |
           npm install
           npm run build
