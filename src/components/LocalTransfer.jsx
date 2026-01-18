@@ -75,7 +75,13 @@ const LocalTransfer = ({ isHost, roomId, onFileReceived, fileToShare }) => {
                 console.log('Download progress:', data.progress, 'Speed:', data.speed);
                 setDownloadProgress(data.progress);
                 setDownloadSpeed(data.speed || 0);
+
+                // When download completes, start playback
                 if (data.progress === 100) {
+                    const playbackUrl = `http://127.0.0.1:${customPort}/downloads/${data.fileName}`;
+                    console.log("Download complete! Playing from:", playbackUrl);
+                    onFileReceived(playbackUrl);
+
                     setTimeout(() => {
                         setDownloadProgress(0);
                         setDownloadSpeed(0);
@@ -141,16 +147,8 @@ const LocalTransfer = ({ isHost, roomId, onFileReceived, fileToShare }) => {
             if (data.success) {
                 alert(`Download started! \nFile will auto-play when ready.`);
                 setDownloads(prev => [...prev, remoteAgent.name]);
+                console.log("Download initiated for:", remoteAgent.name);
 
-                // VIEWER PLAYBACK: Play from agent's temp downloads folder
-                // Agent saves it to %TEMP%/chitrakatha_downloads/filename
-                const safeName = remoteAgent.name;
-                const playbackUrl = `http://127.0.0.1:${customPort}/downloads/${safeName}`;
-                console.log("Viewer loading local file:", playbackUrl);
-
-                // We can start playing immediately if the browser supports buffering partial content 
-                // from the static server, which it likely does.
-                onFileReceived(playbackUrl);
 
             } else {
                 alert(`Download failed: ${data.error}`);
