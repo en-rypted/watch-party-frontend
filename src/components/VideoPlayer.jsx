@@ -26,13 +26,23 @@ const VideoPlayer = ({ src, roomId, isHost, autoResume }) => {
 
     // Restore state after src load
     const handleLoadedMetadata = () => {
+        const video = videoRef.current;
+        console.log(`[VideoPlayer] Metadata loaded - Duration: ${video.duration}s`);
+
         if (autoResume && lastTimeRef.current > 0) {
-            const video = videoRef.current;
             console.log(`[VideoPlayer] Restoring state: Seek to ${lastTimeRef.current}`);
             video.currentTime = lastTimeRef.current;
             if (wasPlayingRef.current) {
                 video.play().catch(e => console.log("Auto-resume blocked:", e));
             }
+        }
+    };
+
+    // Detect duration changes (for torrents that start with duration=0)
+    const handleDurationChange = () => {
+        const video = videoRef.current;
+        if (video && video.duration > 0 && video.duration !== Infinity) {
+            console.log(`[VideoPlayer] Duration updated: ${Math.round(video.duration / 60)} minutes (${video.duration}s)`);
         }
     };
 
@@ -145,6 +155,7 @@ const VideoPlayer = ({ src, roomId, isHost, autoResume }) => {
                         onPause={handlePause}
                         onSeeked={handleSeeked}
                         onLoadedMetadata={handleLoadedMetadata}
+                        onDurationChange={handleDurationChange}
                         onError={(e) => {
                             console.error("Video Error:", e.target.error);
                         }}
