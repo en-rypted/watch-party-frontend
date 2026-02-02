@@ -2,14 +2,11 @@
 .app-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  /* Strict height */
-  overflow: hidden;
-  /* No scroll on body */
-  justify-content: center;
-  /* Vertical Center */
+  min-height: 100vh;
+  /* Use min-height instead of strict height */
+  justify-content: flex-start;
+  /* Align to top */
   align-items: center;
-  /* Horizontal Center */
 }
 
 header {
@@ -127,6 +124,19 @@ main {
 main.docs-mode {
   justify-content: flex-start;
   padding-top: 0px;
+}
+
+main.discover-mode {
+  justify-content: flex-start;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: block;
+  max-width: 100%;
+  padding: 20px;
+  height: auto;
+  /* Allow content to determine height */
+  min-height: 100%;
+  /* Ensure it fills viewport minimum */
 }
 
 /* Main Content Wrapper */
@@ -305,4 +315,313 @@ video {
 
 .animate-fade-in {
   animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* --- Discover / Torrent Search UI Refinement (Strict Monkeytype) --- */
+
+/* Custom Scrollbars (The "Monkeytype" look) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+.search-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 10px 0;
+  background: var(--bg-dark);
+  /* Solid background to cover content */
+  display: flex;
+  justify-content: flex-start;
+  /* Align left like terminal */
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+  width: 100%;
+  border-bottom: 1px solid #333;
+}
+
+.discover-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 0 0 60px 0;
+}
+
+.movie-card {
+  position: relative;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  transition: opacity 0.2s;
+}
+
+.movie-card:hover {
+  opacity: 0.8;
+  transform: none;
+  /* Remove lift */
+}
+
+.movie-card img {
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  border-radius: 2px;
+  display: block;
+}
+
+.movie-card-overlay {
+  display: none;
+}
+
+.movie-card-h4-container {
+  margin-top: 8px;
+}
+
+.movie-card h4 {
+  font-size: 0.9rem;
+  margin: 0;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.movie-card:hover h4 {
+  color: var(--primary);
+}
+
+.movie-card span {
+  font-size: 0.8rem;
+  color: #666;
+  font-family: 'Roboto Mono', monospace;
+}
+
+/* Netflix Layout + Monkeytype Aesthetic */
+.details-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  background: transparent;
+}
+
+.details-backdrop {
+  display: none;
+}
+
+.details-content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* Hero Header Section */
+.details-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #333;
+}
+
+.details-title {
+  font-size: 2.5rem;
+  margin: 0;
+  line-height: 1.1;
+  color: var(--primary);
+  font-family: 'Roboto Mono', monospace;
+  font-weight: 700;
+}
+
+.details-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 0.9rem;
+  color: #666;
+  align-items: center;
+  font-family: 'Roboto Mono', monospace;
+}
+
+/* Info Row: Poster + Description */
+.details-info-row {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.details-poster {
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  border-radius: 4px;
+  display: block;
+  border: 1px solid #333;
+}
+
+.details-desc {
+  line-height: 1.6;
+  font-size: 0.95rem;
+  color: #bbb;
+  font-family: 'Roboto Mono', monospace;
+  margin: 0;
+}
+
+/* Season Tabs Section */
+.season-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.section-header {
+  font-size: 0.85rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-family: 'Roboto Mono', monospace;
+  margin: 0;
+  font-weight: 600;
+}
+
+.season-selector {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.season-btn {
+  background: transparent;
+  border: 1px solid #444;
+  color: #888;
+  padding: 8px 20px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.season-btn:hover {
+  border-color: var(--primary);
+  color: var(--text-main);
+}
+
+.season-btn.active {
+  background: var(--primary);
+  color: #000;
+  border-color: var(--primary);
+  font-weight: 700;
+}
+
+/* Episode Grid */
+.episode-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.episode-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 15px;
+}
+
+.episode-card {
+  background: transparent;
+  padding: 15px;
+  border: 1px solid #333;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: var(--text-muted);
+  font-family: 'Roboto Mono', monospace;
+}
+
+.episode-card:hover {
+  border-color: var(--primary);
+  color: var(--text-main);
+}
+
+.episode-number {
+  font-size: 0.75rem;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.episode-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: inherit;
+}
+
+/* Stream List */
+.stream-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.stream-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stream-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: transparent;
+  padding: 12px 15px;
+  border: 1px solid #333;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: var(--text-muted);
+  font-family: 'Roboto Mono', monospace;
+}
+
+.stream-item:hover {
+  border-color: var(--primary);
+  color: var(--text-main);
+  border-left: 3px solid var(--primary);
+  padding-left: 13px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .details-info-row {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .details-poster {
+    max-width: 280px;
+    margin: 0 auto;
+  }
+
+  .episode-grid {
+    grid-template-columns: 1fr;
+  }
 }
